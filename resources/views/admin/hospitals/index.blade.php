@@ -13,9 +13,18 @@
                 </nav>
             </div>
             <div>
-                <button type="button"  class="btn btn-primary" style="background: rgb(0, 153, 255); border:0" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                
+                <button type="button" class="btn btn-primary" style="background: rgb(0, 153, 255); border:0"
+                    data-bs-toggle="modal" data-bs-target="#import_modal">
+                    Import
+                </button>
+                <button type="button" class="btn btn-primary" style="background: rgb(0, 153, 255); border:0"
+                    data-bs-toggle="modal" data-bs-target="#modalCenter">
                     Tambah
                 </button>
+                <a href="/admin/export/hospitals"  class="btn btn-primary" > Export Excell</a>
+                
+
             </div>
         </div>
     </div>
@@ -44,6 +53,34 @@
                         <!-- Data will be populated by DataTables -->
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="import_modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="import_modal">Add Hospital</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/admin/import/hospitals" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col mb-3">
+                                <label for="hospitalAddress" class="form-label">import file xlsx </label>
+                                <input type="file" name="import_hospotals" class="form-control"
+                                    placeholder="import file xlsx " />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" style="background: rgb(0, 153, 255);" class="btn btn-primary"
+                            >Save changes</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -81,7 +118,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" style="background: rgb(0, 153, 255);" class="btn btn-primary" id="saveHospital">Save changes</button>
+                    <button type="button" style="background: rgb(0, 153, 255);" class="btn btn-primary"
+                        id="saveHospital">Save changes</button>
                 </div>
             </div>
         </div>
@@ -165,7 +203,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" style="background: rgb(0, 153, 255);" class="btn btn-primary" id="updateHospital">Save changes</button>
+                    <button type="button" style="background: rgb(0, 153, 255);" class="btn btn-primary"
+                        id="updateHospital">Save changes</button>
                 </div>
             </div>
         </div>
@@ -178,7 +217,7 @@
     <script type="text/javascript">
         jQuery(function($) {
             var table = $('#hospital-table').DataTable({
-                processing:false,
+                processing: false,
                 serverSide: true,
                 searching: false,
                 paging: false,
@@ -308,13 +347,13 @@
                                 },
                                 success: function(response) {
                                     editModal.hide();
-                                
+
                                     table.ajax.reload();
                                 },
                                 error: function(xhr, status, error) {
                                     alert(
                                         'Terjadi kesalahan saat memperbarui data'
-                                        );
+                                    );
                                     console.error(xhr.responseText);
                                 }
                             });

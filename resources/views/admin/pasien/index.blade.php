@@ -1,9 +1,9 @@
 @extends('layouts.app')
 @section('content')
-@php
-    use App\Models\Mstr_Hospital;
-    $mstr_Hospital = Mstr_Hospital::orderBy('created_at', 'asc')->get();
-@endphp
+    @php
+        use App\Models\Mstr_Hospital;
+        $mstr_Hospital = Mstr_Hospital::orderBy('created_at', 'asc')->get();
+    @endphp
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <div class="">
         <div class="d-flex justify-content-between align-items-center mb-1">
@@ -17,7 +17,8 @@
                 </nav>
             </div>
             <div>
-                <button type="button" class="btn btn-primary" style="background: rgb(0, 153, 255);" style="background: rgb(0, 153, 255); border:0" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                <button type="button" class="btn btn-primary" style="background: rgb(0, 153, 255);"
+                    style="background: rgb(0, 153, 255); border:0" data-bs-toggle="modal" data-bs-target="#modalCenter">
                     Tambah
                 </button>
             </div>
@@ -92,7 +93,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" style="background: rgb(0, 153, 255);" id="savePasien">Save changes</button>
+                    <button type="button" class="btn btn-primary" style="background: rgb(0, 153, 255);"
+                        id="savePasien">Save changes</button>
                 </div>
             </div>
         </div>
@@ -191,7 +193,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" style="background: rgb(0, 153, 255);" id="updatePasien">Save changes</button>
+                    <button type="button" class="btn btn-primary" style="background: rgb(0, 153, 255);"
+                        id="updatePasien">Save changes</button>
                 </div>
             </div>
         </div>
@@ -208,7 +211,7 @@
                 searching: false,
                 paging: false,
                 info: false,
-                "ajax" :{
+                "ajax": {
                     "url": "{{ route('pasien.index') }}",
                     data: function(d) {
                         var id_hospital = $("[name='id_hospital']").val();
@@ -317,92 +320,91 @@
 
 
             window.editItem = function(id) {
-    $.ajax({
-        url: "{{ route('pasien.edit', ':id') }}".replace(':id', id),
-        type: 'GET',
-        success: function(response) {
-            // Populate fields with patient data
-            $('#id').val(response.id);
-            $('#editPasienName').val(response.patient_name);
-            $('#editHospitalAddress').val(response.address);
-            $('#editPhoneNumber').val(response.phone_number);
-
-            // Populate select dropdown with hospital options
-            var hospitalOptions = response.hospitalOptions;
-            var selectOptions = '';
-
-            // Iterate over hospitalOptions to create <option> elements
-            hospitalOptions.forEach(function(hospital) {
-                var selected = '';
-                if (hospital.id == response.hospital_id) {
-                    selected = 'selected';
-                }
-                selectOptions += '<option value="' + hospital.id +
-                    '" ' +
-                    selected + '>' + hospital.hospital_name +
-                    '</option>';
-            });
-
-
-            $('#hospitalSelect').html(selectOptions);
-
-            $('#updatePasien').off('click').on('click', function() {
-                var id = $('#id').val();
-                var editPasienName = $('#editPasienName').val();
-                var editHospitalAddress = $('#editHospitalAddress').val();
-                var editPhoneNumber = $('#editPhoneNumber').val();
-                var hospitalSelect = $('#hospitalSelect').val();
-
-
-
                 $.ajax({
-                    url: "{{ route('pasien.update', ':id') }}".replace(':id', id),
-                    type: 'PUT',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    data: {
-                        id: id,
-                        patient_name: editPasienName,
-                        address: editHospitalAddress,
-                        phone_number: editPhoneNumber,
-                        hospital_id: hospitalSelect
-                    },
+                    url: "{{ route('pasien.edit', ':id') }}".replace(':id', id),
+                    type: 'GET',
                     success: function(response) {
-                        var editModal = bootstrap.Modal.getInstance(document.getElementById('editModal'));
-                        editModal.hide();
-                        table.ajax.reload();
+                        // Populate fields with patient data
+                        $('#id').val(response.id);
+                        $('#editPasienName').val(response.patient_name);
+                        $('#editHospitalAddress').val(response.address);
+                        $('#editPhoneNumber').val(response.phone_number);
+
+                        // Populate select dropdown with hospital options
+                        var hospitalOptions = response.hospitalOptions;
+                        var selectOptions = '';
+
+                        // Iterate over hospitalOptions to create <option> elements
+                        hospitalOptions.forEach(function(hospital) {
+                            var selected = '';
+                            if (hospital.id == response.hospital_id) {
+                                selected = 'selected';
+                            }
+                            selectOptions += '<option value="' + hospital.id +
+                                '" ' +
+                                selected + '>' + hospital.hospital_name +
+                                '</option>';
+                        });
+
+
+                        $('#hospitalSelect').html(selectOptions);
+
+                        $('#updatePasien').off('click').on('click', function() {
+                            var id = $('#id').val();
+                            var editPasienName = $('#editPasienName').val();
+                            var editHospitalAddress = $('#editHospitalAddress').val();
+                            var editPhoneNumber = $('#editPhoneNumber').val();
+                            var hospitalSelect = $('#hospitalSelect').val();
+
+
+
+                            $.ajax({
+                                url: "{{ route('pasien.update', ':id') }}".replace(
+                                    ':id', id),
+                                type: 'PUT',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]')
+                                        .attr('content')
+                                },
+                                data: {
+                                    id: id,
+                                    patient_name: editPasienName,
+                                    address: editHospitalAddress,
+                                    phone_number: editPhoneNumber,
+                                    hospital_id: hospitalSelect
+                                },
+                                success: function(response) {
+                                    var editModal = bootstrap.Modal.getInstance(
+                                        document.getElementById('editModal')
+                                        );
+                                    editModal.hide();
+                                    table.ajax.reload();
+                                },
+                                error: function(xhr, status, error) {
+                                    console.error(
+                                        'Error dalam permintaan Ajax:',
+                                        error);
+                                    $('#editModal').find('.modal-body').html(
+                                        '<div class="alert alert-danger">Terjadi kesalahan saat memperbarui data</div>'
+                                    );
+                                }
+                            });
+                        });
+
+
+                        var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+                        editModal.show();
                     },
                     error: function(xhr, status, error) {
                         console.error('Error dalam permintaan Ajax:', error);
                         $('#editModal').find('.modal-body').html(
-                            '<div class="alert alert-danger">Terjadi kesalahan saat memperbarui data</div>'
+                            '<div class="alert alert-danger">Terjadi kesalahan saat mengambil data</div>'
                         );
                     }
                 });
-            });
-
-
-            var editModal = new bootstrap.Modal(document.getElementById('editModal'));
-            editModal.show();
-        },
-        error: function(xhr, status, error) {
-            console.error('Error dalam permintaan Ajax:', error);
-            $('#editModal').find('.modal-body').html(
-                '<div class="alert alert-danger">Terjadi kesalahan saat mengambil data</div>'
-            );
-        }
-    });
-};
-
-
-
-
-
-
-
-
+            };
             window.deleteItem = deleteItem;
         });
     </script>
 @endsection
+z

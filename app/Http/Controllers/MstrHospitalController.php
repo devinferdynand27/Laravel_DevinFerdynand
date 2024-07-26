@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\HospitalExport;
+use App\Imports\HospitalsImport;
 use App\Models\Mstr_Hospital;
 use App\Models\Pasien;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MstrHospitalController extends Controller
 {
@@ -128,5 +131,19 @@ class MstrHospitalController extends Controller
         }
         $hospital->delete();
         return response()->json(['success' => true, 'message' => 'Hospital deleted successfully']);
+    }
+
+    public function import_hospitals(Request $request){
+       $request->validate([
+            'import_hospotals' => [
+                'required',
+                'file'
+            ],
+        ]);
+        Excel::import(new HospitalsImport, $request->file('import_hospotals'));
+        return redirect()->back()->with('status', 'Imported Successfully');
+    }
+    public function export_hospitals(){
+        return Excel::download(new HospitalExport, 'hospitals.xlsx');
     }
 }

@@ -29,4 +29,6 @@ Route::prefix('admin')->middleware('admin')->group(function () {
     Route::get('logout-post', [AuthController::class, 'logout']);
     Route::resource('/hospitals', MstrHospitalController::class)->names('hospital');
     Route::resource('/pasien', PasienController::class)->names('pasien');
+    Route::post('/import/hospitals', [MstrHospitalController::class , 'import_hospitals']);
+    Route::get('/export/hospitals', [MstrHospitalController::class , 'export_hospitals']);
 });
